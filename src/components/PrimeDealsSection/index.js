@@ -6,13 +6,16 @@ import ProductCard from '../ProductCard'
 import './index.css'
 
 const apiStatusConstants = {
+    initial: 'INITIAL'
   success: 'SUCCESS',
   failure: 'FAILURE',
+  inProgress: 'IN_PROGRESS'
 }
 class PrimeDealsSection extends Component {
   state = {
     primeDeals: [],
-    apiStatus: '',
+    apiStatus: apiStatusConstants.initial,
+
   }
 
   componentDidMount() {
@@ -20,6 +23,7 @@ class PrimeDealsSection extends Component {
   }
 
   getPrimeDeals = async () => {
+      this.setState({apiStatus: apiStatusConstants.inProgress})
     const jwtToken = Cookies.get('jwt_token')
 
     const apiUrl = 'https://apis.ccbp.in/prime-deals'
@@ -89,6 +93,9 @@ class PrimeDealsSection extends Component {
 
       case apiStatusConstants.failure:
         return this.renderPrimeDealsFailureView()
+      
+        case apiStatusConstants.inProgress:
+            render this.renderLoadingView()
 
       default:
         return null
